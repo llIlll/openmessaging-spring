@@ -39,7 +39,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Register {@link OMSMessageListener} to BeanDefinitionRegistry
@@ -49,9 +48,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ConsumerRegistrar implements BeanPostProcessor, BeanFactoryAware, SmartInitializingSingleton {
 
-    private static final String CONSUMER_CONTAINER_ID = "%s.consumer.%s";
+    private static final String CONSUMER_CONTAINER_ID = "%s.consumer.container.%s";
 
-    private final AtomicInteger SEQUENCE = new AtomicInteger();
+    private int consumerSequence = 0;
 
     private AccessPointContainer accessPointContainer;
     private BeanFactory beanFactory;
@@ -114,8 +113,13 @@ public class ConsumerRegistrar implements BeanPostProcessor, BeanFactoryAware, S
         Class<?>[] parameterTypes = method.getParameterTypes();
         Type[] genericParameterTypes = method.getGenericParameterTypes();
 
-        boolean isListener = (parameterTypes.length == 2 && parameterTypes[0].equals(Message.class) && parameterTypes[1].equals(MessageListener.Context.class));
-        boolean isBatchListener = (parameterTypes.length == 2 && genericParameterTypes[0].getTypeName().equals(String.format("java.util.List<%s>", Message.class.getName())) && parameterTypes[1].equals(BatchMessageListener.Context.class));
+        boolean isListener = (parameterTypes.length == 2
+                && parameterTypes[0].equals(Message.class)
+                && parameterTypes[1].equals(MessageListener.Context.class));
+
+        boolean isBatchListener = (parameterTypes.length == 2
+                && genericParameterTypes[0].getTypeName().equals(String.format("java.util.List<%s>", Message.class.getName()))
+                && parameterTypes[1].equals(BatchMessageListener.Context.class));
 
         if (!isListener && !isBatchListener) {
             throw new IllegalArgumentException("listener parameters error, need MessageListener.onReceived or BatchMessageListener.onReceived");
@@ -130,7 +134,7 @@ public class ConsumerRegistrar implements BeanPostProcessor, BeanFactoryAware, S
 
     protected void registerListener(OMSMessageListener omsMessageListener, Object listenerBean) {
         BeanDefinitionRegistry beanDefinitionRegistry = (BeanDefinitionRegistry) beanFactory;
-        String id = String.format(CONSUMER_CONTAINER_ID, OMSSpringConsts.BEAN_ID_PREFIX, SEQUENCE.getAndIncrement());
+        String id = String.format(CONSUMER_CONTAINER_ID, OMSSpringConsts.BEAN_ID_PREFIX, consumerSequence++);
 
         BeanDefinition consumerBeanDefinition = BeanDefinitionBuilder.rootBeanDefinition(ConsumerContainer.class)
                 .addConstructorArgValue(omsMessageListener.queueName())
