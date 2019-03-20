@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package io.openmessaging.spring.boot.registry;
+package io.openmessaging.spring.boot.registrar;
 
 import io.openmessaging.consumer.BatchMessageListener;
 import io.openmessaging.consumer.MessageListener;
