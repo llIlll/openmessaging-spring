@@ -17,18 +17,25 @@
 
 package io.openmessaging.samples.springboot;
 
-import io.openmessaging.consumer.MessageListener;
+import io.openmessaging.interceptor.ConsumerInterceptor;
+import io.openmessaging.interceptor.Context;
 import io.openmessaging.message.Message;
-import io.openmessaging.spring.boot.annotation.OMSMessageListener;
-import org.springframework.stereotype.Component;
+import io.openmessaging.spring.boot.annotation.OMSInterceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Component
-@OMSMessageListener(queueName = "test_topic_2")
-public class MessageListener2 implements MessageListener {
+@OMSInterceptor
+public class SimpleConsumerInterceptor implements ConsumerInterceptor {
+
+    protected final Logger logger = LoggerFactory.getLogger(SimpleConsumerInterceptor.class);
 
     @Override
-    public void onReceived(Message message, MessageListener.Context context) {
-        System.out.println(String.format("receive, message: %s", message));
-        context.ack();
+    public void preReceive(Message message, Context attributes) {
+        logger.info("preReceive, message: {}", message);
+    }
+
+    @Override
+    public void postReceive(Message message, Context attributes) {
+        logger.info("postReceive, message: {}", message);
     }
 }

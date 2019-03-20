@@ -17,19 +17,23 @@
 
 package io.openmessaging.samples.spring;
 
+import io.openmessaging.interceptor.ConsumerInterceptor;
 import io.openmessaging.interceptor.Context;
-import io.openmessaging.interceptor.ProducerInterceptor;
 import io.openmessaging.message.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class ProducerInterceptor1 implements ProducerInterceptor {
+public class SimpleConsumerInterceptor implements ConsumerInterceptor {
+
+    protected final Logger logger = LoggerFactory.getLogger(SimpleConsumerInterceptor.class);
 
     @Override
-    public void preSend(Message message, Context attributes) {
-        System.out.println(String.format("preSend, message: %s", message));
+    public void preReceive(Message message, Context attributes) {
+        logger.info("preReceive, message: {}", message);
     }
 
     @Override
-    public void postSend(Message message, Context attributes) {
-        System.out.println(String.format("postSend, message: %s", message));
+    public void postReceive(Message message, Context attributes) {
+        logger.info("postReceive, message: {}", message);
     }
 }

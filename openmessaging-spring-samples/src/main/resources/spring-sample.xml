@@ -12,12 +12,12 @@
 
     <oms:producer id="producer1"></oms:producer>
 
-    <oms:consumer queue-name="test_topic_0" listener="io.openmessaging.samples.spring.MessageListener1"></oms:consumer>
+    <oms:consumer queue-name="test_topic_0" listener="io.openmessaging.samples.spring.SimpleMessageListener"></oms:consumer>
     <!--<oms:consumer queue-name="test_topic_0" listener-ref="testTopic0Listener"></oms:consumer>-->
 
-    <oms:interceptor class="io.openmessaging.samples.spring.ConsumerInterceptor1"></oms:interceptor>
+    <oms:interceptor class="io.openmessaging.samples.spring.SimpleConsumerInterceptor"></oms:interceptor>
     <!--<oms:interceptor ref="consumerInterceptor1"></oms:interceptor>-->
 
-    <oms:interceptor class="io.openmessaging.samples.spring.ProducerInterceptor1"></oms:interceptor>
+    <oms:interceptor class="io.openmessaging.samples.spring.SimpleProducerInterceptor"></oms:interceptor>
     <!--<oms:interceptor ref="producerInterceptor1"></oms:interceptor>-->
 </beans>

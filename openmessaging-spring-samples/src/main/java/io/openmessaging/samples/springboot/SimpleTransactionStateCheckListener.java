@@ -20,13 +20,17 @@ package io.openmessaging.samples.springboot;
 import io.openmessaging.message.Message;
 import io.openmessaging.producer.TransactionStateCheckListener;
 import io.openmessaging.spring.boot.annotation.OMSTransactionStateCheckListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @OMSTransactionStateCheckListener
-public class TransactionStateCheckListener1 implements TransactionStateCheckListener {
+public class SimpleTransactionStateCheckListener implements TransactionStateCheckListener {
+
+    protected final Logger logger = LoggerFactory.getLogger(SimpleTransactionStateCheckListener.class);
 
     @Override
     public void check(Message message, TransactionalContext context) {
-        System.out.println(String.format("check, message: %s", message));
+        logger.info("check transaction, message: {}", message);
         context.commit();
     }
 }

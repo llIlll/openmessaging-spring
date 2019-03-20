@@ -15,15 +15,24 @@
  *  limitations under the License.
  */
 
-package io.openmessaging.samples.spring;
+package io.openmessaging.samples.springboot;
 
 import io.openmessaging.consumer.MessageListener;
 import io.openmessaging.message.Message;
+import io.openmessaging.spring.boot.annotation.OMSMessageListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
-public class MessageListener1 implements MessageListener {
+@Component
+@OMSMessageListener(queueName = "test_topic_2")
+public class SimpleMessageListener implements MessageListener {
+
+    protected final Logger logger = LoggerFactory.getLogger(SimpleMessageListener.class);
 
     @Override
-    public void onReceived(Message message, Context context) {
-        System.out.println(String.format("receive, message: %s", message));
+    public void onReceived(Message message, MessageListener.Context context) {
+        logger.info("receive, message: {}", message);
+        context.ack();
     }
 }

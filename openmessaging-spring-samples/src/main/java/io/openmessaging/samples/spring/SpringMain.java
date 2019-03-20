@@ -22,6 +22,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class SpringMain {
 
     public static void main(String[] args) {
-        new ClassPathXmlApplicationContext("spring1.xml");
+        new ClassPathXmlApplicationContext("spring-sample.xml");
     }
 }

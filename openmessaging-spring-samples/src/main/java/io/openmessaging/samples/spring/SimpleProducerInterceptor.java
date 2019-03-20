@@ -15,23 +15,25 @@
  *  limitations under the License.
  */
 
-package io.openmessaging.samples.springboot;
+package io.openmessaging.samples.spring;
 
 import io.openmessaging.interceptor.Context;
 import io.openmessaging.interceptor.ProducerInterceptor;
 import io.openmessaging.message.Message;
-import io.openmessaging.spring.boot.annotation.OMSInterceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@OMSInterceptor
-public class ProducerInterceptor1 implements ProducerInterceptor {
+public class SimpleProducerInterceptor implements ProducerInterceptor {
+
+    protected final Logger logger = LoggerFactory.getLogger(SimpleProducerInterceptor.class);
 
     @Override
     public void preSend(Message message, Context attributes) {
-        System.out.println(String.format("preSend, message: %s", message));
+        logger.info("preSend, message: {}", message);
     }
 
     @Override
     public void postSend(Message message, Context attributes) {
-        System.out.println(String.format("postSend, message: %s", message));
+        logger.info("postSend, message: {}", message);
     }
 }
