@@ -48,11 +48,7 @@ public class ConsumerContainer implements InitializingBean, DisposableBean, Fact
     @Override
     public void afterPropertiesSet() {
         Consumer consumer = accessPointContainer.getAccessPoint().createConsumer();
-        consumer.start();
 
-        for (ConsumerInterceptor interceptor : accessPointContainer.getConsumerInterceptors()) {
-            consumer.addInterceptor(interceptor);
-        }
         if (messageListener instanceof MessageListener) {
             consumer.bindQueue(queueName, (MessageListener) messageListener);
         } else if (messageListener instanceof BatchMessageListener) {
@@ -61,6 +57,11 @@ public class ConsumerContainer implements InitializingBean, DisposableBean, Fact
             throw new IllegalArgumentException("listener type error, need MessageListener or BatchMessageListener");
         }
 
+        for (ConsumerInterceptor interceptor : accessPointContainer.getConsumerInterceptors()) {
+            consumer.addInterceptor(interceptor);
+        }
+
+        consumer.start();
         this.consumer = consumer;
     }
 
